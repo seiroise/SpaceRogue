@@ -1,9 +1,10 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Collections;
 
 namespace STG.Obj.DataObj {
 
 	/// <summary>
-	/// STG用のアドオンリストデータオブジェクト
+	/// STGのアドオンリストデータオブジェクト
 	/// </summary>
 	public class STGAddonListDataObj : STGListDataObj<STGAddonDataObj> { }
 }

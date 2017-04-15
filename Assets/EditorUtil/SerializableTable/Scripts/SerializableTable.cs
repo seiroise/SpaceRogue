@@ -12,6 +12,9 @@ namespace EditorUtil {
 		[SerializeField]
 		protected List<TPair> _list;
 		protected Dictionary<TKey, TValue> _table;
+		/// <summary>
+		/// なるべくGetValue, SetValueを使用する
+		/// </summary>
 		[System.Obsolete]
 		public Dictionary<TKey, TValue> table { get { return _table; } }
 

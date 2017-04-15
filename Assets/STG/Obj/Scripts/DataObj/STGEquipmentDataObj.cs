@@ -8,24 +8,20 @@ namespace STG.Obj.DataObj {
 	/// <summary>
 	/// STGの装備データオブジェクト
 	/// </summary>
-	public class STGEquipmentDataObj<TEquipment> : STGDataObj where TEquipment : STGObjEquipment {
+	public class STGEquipmentDataObj<Equipment> : STGDataObj where Equipment : STGObjEquipment{
 
 		[Header("プレハブ")]
 		[SerializeField]
-		private TEquipment _equipment;
-		public TEquipment equipment { get { return _equipment; } }
+		private Equipment _equipment;
+		public Equipment equipment { get { return _equipment; } }
 
 		[Header("基本情報")]
 		[SerializeField]
 		private STGEquipmentInfo _baseInfo;
 		public STGEquipmentInfo baseInfo { get { return _baseInfo; } }
 
-		[Header("パラメータ")]
 		[SerializeField, Button("SetTemplate", "SetTemplateParameter")]
 		public int _btn1;
-		[SerializeField]
-		private StringFloatTable _parameter;
-		public StringFloatTable parameter { get { return _parameter; } }
 
 		/// <summary>
 		/// テンプレパラメータの設定

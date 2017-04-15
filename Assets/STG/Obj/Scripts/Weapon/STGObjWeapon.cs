@@ -4,6 +4,7 @@ using STG.Obj.Equipment;
 using STG.BaseUtility.ObjectDetector;
 using STG.BaseUtility.ComSystem;
 using STG.Bullet;
+using EditorUtil;
 
 namespace STG.Obj.Weapon {
 
@@ -12,32 +13,40 @@ namespace STG.Obj.Weapon {
 	/// </summary>
 	public class STGObjWeapon : STGObjEquipment {
 
-		[Header("パラメータ")]
-		[SerializeField]
-		private STGObjWeaponParameter baseParameter;
-		public STGObjWeaponParameter BaseParameter { get { return baseParameter; } }
-		private float bLifeTime;
-		[SerializeField]
-		private ObjectAttribute targetAttribute;
-		public ObjectAttribute TargetAttribute { get { return targetAttribute; } set { targetAttribute = value; } }
+		//パラメータ
+		public const string PARAM_DAMAGE = "damage";
+		public const string PARAM_INTERVAL = "interval";
+		public const string PARAM_SHOT_RANGE = "shotRange";
+		public const string PARAM_SHOT_SPEED = "shotSpeed";
+		public const string PARAM_AMMO = "ammo";
+
+		[SerializeField, Disable]
+		private STGObjWeaponParameter _baseParameter;	//基本パラメータ
+		public STGObjWeaponParameter baseParameter { get { return _baseParameter; } }
 
 		[Header("弾")]
 		[SerializeField]
-		private STGBullet bullet;
-		public STGBullet Bullet { get { return bullet; } }
-		private STGBulletPool.Pool bulletPool;
+		private STGBullet _bullet;						//使用する弾
+		public STGBullet bullet { get { return _bullet; } }
+		private STGBulletPool.Pool _bulletPool;			//使用する弾のプール
 		[SerializeField]
-		private Transform[] shotPositions;
+		private Transform[] _shotPositions;				//発射箇所リスト
 		[SerializeField]
-		private string bulletExclusionTag = "None";
-		public string BulletExclusionTag { get { return bulletExclusionTag; } set { bulletExclusionTag = value; } }
+		private string _bulletExclusionTag = "None";	//除外タグ
+		public string bulletExclusionTag { get { return _bulletExclusionTag; } set { _bulletExclusionTag = value; } }
+
+		[Header("オプション")]
+		[SerializeField]
+		private ObjectAttribute _targetAttribute;       //ターゲット属性
+		public ObjectAttribute targetAttribute { get { return _targetAttribute; } set { _targetAttribute = value; } }
 
 		[Header("コンポーネント")]
 		[SerializeField]
-		private STGObjWeaponCom[] coms;
+		private STGObjWeaponCom[] _coms;                 //その他コンポーネント
 
-		private float tInterval;
-		public float intervalRatio { get { return tInterval / baseParameter.Interval; } }
+		private float _bLifeTime;                       //弾の生存時間
+		private float _tInterval;						//発射間隔
+		public float readyRatio { get { return _tInterval / _baseParameter.interval; } }	//発射準備割合
 
 		#region UnityEvent
 
@@ -56,9 +65,9 @@ namespace STG.Obj.Weapon {
 		/// </summary>
 		public override void STGInit(STGComManager manager) {
 			base.STGInit(manager);
-			tInterval = 0f;
-			if(baseParameter != null) {
-				bLifeTime = baseParameter.lifeTime;
+			_tInterval = 0f;
+			if(_baseParameter != null) {
+				_bLifeTime = _baseParameter.lifeTime;
 			}
 			InitComs();
 		}
@@ -79,6 +88,31 @@ namespace STG.Obj.Weapon {
 			StandbyComs();
 		}
 
+		/// <summary>
+		/// パラメータの設定
+		/// </summary>
+		public override void SetParameter(StringFloatTable paramTable) {
+			_baseParameter.damage = (int)paramTable.GetValue(PARAM_DAMAGE);
+			_baseParameter.interval = (int)paramTable.GetValue(PARAM_INTERVAL);
+			_baseParameter.shotRange = (int)paramTable.GetValue(PARAM_SHOT_RANGE);
+			_baseParameter.shotSpeed = (int)paramTable.GetValue(PARAM_SHOT_SPEED);
+			_baseParameter.ammo = (int)paramTable.GetValue(PARAM_AMMO);
+		}
+
+		/// <summary>
+		/// 耐久値の取得
+		/// </summary>
+		public override int GetDulability() {
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// 耐久値の設定
+		/// </summary>
+		public override void SetDulability(int dulability) {
+			throw new NotImplementedException();
+		}
+
 		#endregion
 
 		#region Function
@@ -87,10 +121,10 @@ namespace STG.Obj.Weapon {
 		/// 再装填
 		/// </summary>
 		private void Reload() {
-			tInterval += Time.deltaTime;
-			if (tInterval > baseParameter.Interval) {
+			_tInterval += Time.deltaTime;
+			if (_tInterval > _baseParameter.interval) {
 				Shot();
-				tInterval = 0f;
+				_tInterval = 0f;
 			}
 		}
 
@@ -98,15 +132,15 @@ namespace STG.Obj.Weapon {
 		/// 発射
 		/// </summary>
 		private void Shot() {
-			if (bulletPool != null) {
-				foreach (var shotPos in shotPositions) {
-					STGBullet b = bulletPool.GetObject(shotPos.position);
+			if (_bulletPool != null) {
+				foreach (var shotPos in _shotPositions) {
+					STGBullet b = _bulletPool.GetObject(shotPos.position);
 					b.transform.eulerAngles = shotPos.eulerAngles;
 					b.InitBullet(this);
-					b.Attacker.ExclusionTag = bulletExclusionTag;
-					b.Attacker.Damage = baseParameter.Damage;
-					b.speed = baseParameter.ShotSpeed;
-					b.LifeTime = bLifeTime;
+					b.Attacker.ExclusionTag = _bulletExclusionTag;
+					b.Attacker.Damage = _baseParameter.damage;
+					b.speed = _baseParameter.shotSpeed;
+					b.LifeTime = _bLifeTime;
 					ShotComs(b);
 				}
 			}
@@ -116,8 +150,8 @@ namespace STG.Obj.Weapon {
 		/// 弾の設定
 		/// </summary>
 		public void SetBullet(STGBulletPool pool) {
-			if (bulletPool == null) {
-				bulletPool = pool.RegistObject(bullet);
+			if (_bulletPool == null) {
+				_bulletPool = pool.RegistObject(_bullet);
 			}
 		}
 
@@ -129,7 +163,7 @@ namespace STG.Obj.Weapon {
 		/// 初期化
 		/// </summary>
 		private void InitComs() {
-			foreach (var c in coms) {
+			foreach (var c in _coms) {
 				c.InitCom(this);
 			}
 		}
@@ -138,7 +172,7 @@ namespace STG.Obj.Weapon {
 		/// 起動
 		/// </summary>
 		private void AwakeComs() {
-			foreach (var c in coms) {
+			foreach (var c in _coms) {
 				c.AwakeCom();
 			}
 		}
@@ -147,7 +181,7 @@ namespace STG.Obj.Weapon {
 		/// 待機
 		/// </summary>
 		private void StandbyComs() {
-			foreach (var c in coms) {
+			foreach (var c in _coms) {
 				c.StandbyCom();
 			}
 		}
@@ -156,7 +190,7 @@ namespace STG.Obj.Weapon {
 		/// 発射
 		/// </summary>
 		private void ShotComs(STGBullet bullet) {
-			foreach (var c in coms) {
+			foreach (var c in _coms) {
 				c.ShotCom(bullet);
 			}
 		}

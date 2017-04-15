@@ -1,9 +1,10 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Collections;
 
 namespace STG.Obj.DataObj {
 
 	/// <summary>
-	/// STG用の推進器リストデータオブジェクト
+	/// STGの推進器リストデータオブジェクト
 	/// </summary>
 	public class STGThrusterListDataObj : STGListDataObj<STGThrusterDataObj> { }
 }

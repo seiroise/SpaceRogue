@@ -2,6 +2,7 @@
 using System;
 using STG.Obj.DataObj;
 using STG.BaseUtility.ComSystem;
+using EditorUtil;
 
 namespace STG.Obj.Equipment {
 
@@ -9,7 +10,7 @@ namespace STG.Obj.Equipment {
 	/// 抽象的なSTGオブジェクト用の装備
 	/// </summary>
 	public abstract class STGObjEquipment : STGCom {
-
+		
 		protected bool _isBusy;	//起動状態
 		public bool isBusy { get { return _isBusy; } }
 
@@ -33,6 +34,21 @@ namespace STG.Obj.Equipment {
 		public virtual void StandDownEquipment() {
 			_isBusy = false;
 		}
+
+		/// <summary>
+		/// パラメータの設定
+		/// </summary>
+		public abstract void SetParameter(StringFloatTable paramTable);
+
+		/// <summary>
+		/// 耐久値の取得
+		/// </summary>
+		public abstract int GetDulability();
+
+		/// <summary>
+		/// 耐久値の設定
+		/// </summary>
+		public abstract void SetDulability(int dulability);
 
 		#endregion
 	}

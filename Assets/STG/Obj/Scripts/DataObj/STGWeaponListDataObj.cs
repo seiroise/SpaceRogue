@@ -1,9 +1,10 @@
-﻿using System;
+﻿using UnityEngine;
+using System.Collections;
 
 namespace STG.Obj.DataObj {
 
 	/// <summary>
-	/// STG用の武器リストデータオブジェクト
+	/// STGの武器リストデータオブジェクト
 	/// </summary>
 	public class STGWeaponListDataObj : STGListDataObj<STGWeaponDataObj> { }
 }

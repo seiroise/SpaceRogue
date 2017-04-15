@@ -25,15 +25,17 @@ namespace STG.ObjUtility {
 		/// <summary>
 		/// STGObjに指定した武器を装備させる
 		/// </summary>
-		public void EquipedWeapon(STGObj obj, STGObjWeapon weapon) {
-			if(_bulletPool) return;
+		public void EquipedWeapon(STGObj obj, STGWeaponDataObj weaponData) {
+			if(!_bulletPool || !weaponData) return;
 			//ウエポンコントローラの取得
 			var wCon = obj.GetCom<STGObjWeaponController>();
 			if (wCon) {
-				var w = wCon.SetEquipment(weapon, false);
-				//バレットの設定
-				if (weapon) {
-					weapon.SetBullet(_bulletPool);
+				var w = wCon.SetEquipment(weaponData.equipment, false);
+				if (w) {
+					//パラメータの設定
+					w.SetParameter(weaponData.parameter);
+					//バレットの設定
+					w.SetBullet(_bulletPool);
 				}
 			}
 		}

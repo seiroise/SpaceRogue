@@ -85,7 +85,7 @@ namespace STG.Obj.Targeting {
 			if (!weaponCon) return;
 			//それぞれの武器毎に設定されている属性で一番近いオブジェクト
 			weaponCon.EquipmentIterator((i, e) => {
-				var t = detector.GetNearObject(e.TargetAttribute);
+				var t = detector.GetNearObject(e.targetAttribute);
 				if (t) {
 					weaponCon.SetTarget(i, t.transform);
 				} else {
