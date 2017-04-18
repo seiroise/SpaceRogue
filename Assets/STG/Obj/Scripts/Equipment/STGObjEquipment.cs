@@ -10,8 +10,12 @@ namespace STG.Obj.Equipment {
 	/// 抽象的なSTGオブジェクト用の装備
 	/// </summary>
 	public abstract class STGObjEquipment : STGCom {
-		
-		protected bool _isBusy;	//起動状態
+
+		[SerializeField]
+		private STGEquipmentDataObj _dataObj;
+		public STGEquipmentDataObj dataObj { get { return _dataObj; } }
+
+		protected bool _isBusy; //起動状態
 		public bool isBusy { get { return _isBusy; } }
 
 		#region VirtualFunction
@@ -43,12 +47,12 @@ namespace STG.Obj.Equipment {
 		/// <summary>
 		/// 耐久値の取得
 		/// </summary>
-		public abstract int GetDulability();
+		public abstract int GetDurability();
 
 		/// <summary>
 		/// 耐久値の設定
 		/// </summary>
-		public abstract void SetDulability(int dulability);
+		public abstract void SetDurability(int dulability);
 
 		#endregion
 	}

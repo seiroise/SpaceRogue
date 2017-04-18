@@ -48,11 +48,11 @@ namespace STG.Obj.Thruster {
 			throw new NotImplementedException();
 		}
 
-		public override int GetDulability() {
+		public override int GetDurability() {
 			throw new NotImplementedException();
 		}
 
-		public override void SetDulability(int dulability) {
+		public override void SetDurability(int dulability) {
 			throw new NotImplementedException();
 		}
 

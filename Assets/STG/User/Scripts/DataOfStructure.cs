@@ -17,15 +17,15 @@ namespace STG.User {
 		public string structureID { get { return _structureID; } }
 
 		[SerializeField]
-		private List<IDAndRemain> _weapons;     //装備武器
-		public List<IDAndRemain> weapons { get { return _weapons; } }
+		private List<IDAndDurability> _weapons;     //装備武器
+		public List<IDAndDurability> weapons { get { return _weapons; } }
 
 		[SerializeField]
-		private List<IDAndRemain> _thrusters;	//装備推進器
-		public List<IDAndRemain> thrusters { get { return _thrusters; } }
+		private List<IDAndDurability> _thrusters;	//装備推進器
+		public List<IDAndDurability> thrusters { get { return _thrusters; } }
 
 		[SerializeField]
-		private List<IDAndRemain> _addons;   //装備推進器
-		public List<IDAndRemain> addons { get { return _addons; } }
+		private List<IDAndDurability> _addons;   //装備推進器
+		public List<IDAndDurability> addons { get { return _addons; } }
 	}
 }

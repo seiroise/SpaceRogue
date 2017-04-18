@@ -102,14 +102,14 @@ namespace STG.Obj.Weapon {
 		/// <summary>
 		/// 耐久値の取得
 		/// </summary>
-		public override int GetDulability() {
+		public override int GetDurability() {
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
 		/// 耐久値の設定
 		/// </summary>
-		public override void SetDulability(int dulability) {
+		public override void SetDurability(int dulability) {
 			throw new NotImplementedException();
 		}
 

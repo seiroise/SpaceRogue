@@ -10,11 +10,11 @@ namespace STG.Obj.Addon {
 	/// </summary>
 	public class STGObjAddon : STGObjEquipment {
 
-		public override int GetDulability() {
+		public override int GetDurability() {
 			throw new NotImplementedException();
 		}
 
-		public override void SetDulability(int dulability) {
+		public override void SetDurability(int dulability) {
 			throw new NotImplementedException();
 		}
 

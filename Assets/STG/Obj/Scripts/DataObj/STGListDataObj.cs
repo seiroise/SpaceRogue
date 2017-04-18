@@ -8,7 +8,7 @@ namespace STG.Obj.DataObj {
 	/// </summary>
 	public class STGListDataObj<T> : STGDataObj where T : STGDataObj {
 		
-		[SerializeField]
+		[SerializeField, Space(10)]
 		private T[] _datas;
 		private Dictionary<string, T> _cash;	//検索結果のキャッシュ
 

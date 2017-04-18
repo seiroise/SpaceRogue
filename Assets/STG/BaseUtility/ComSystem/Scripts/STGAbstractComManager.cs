@@ -13,12 +13,13 @@ namespace STG.BaseUtility.ComSystem {
 		/// <summary>
 		/// 登録されているコンポーネントの識別タグ
 		/// </summary>
-		protected class ComTag {
-			
+		public class ComTag {
+
 			private Com _com;
 			public Com com { get { return _com; } }
+
 			private Type _comType;
-			public Type comType { get { return comType; } }
+			public Type comType { get { return _comType; } }
 
 			/// <summary>
 			/// コンストラクタ
@@ -54,7 +55,9 @@ namespace STG.BaseUtility.ComSystem {
 		/// </summary>
 		public override void STGInit(STGComManager manager) {
 			base.STGInit(manager);
-			_comList = new List<ComTag>();
+			if(_comList == null) {
+				_comList = InitComList(_initComs);
+			}
 			InitComs(manager);
 		}
 
@@ -68,17 +71,37 @@ namespace STG.BaseUtility.ComSystem {
 
 		#endregion
 
+		#region Operator
+
+		public Com this[int i] {
+			get{
+				return _comList[i].com;
+			}
+		}
+
+		#endregion
+
 		#region Function
+
+		/// <summary>
+		/// _comListの初期化
+		/// </summary>
+		private List<ComTag> InitComList(Com[] coms) {
+			var comList = new List<ComTag>();
+			foreach(var c in coms) {
+				if(c) {
+					comList.Add(new ComTag(c));
+				}
+			}
+			return comList;
+		}
 
 		/// <summary>
 		/// 登録コンポーネントの初期化
 		/// </summary>
 		private void InitComs(STGComManager manager) {
-			foreach(var c in _initComs) {
-				if(c) {
-					c.STGInit(manager);
-					_comList.Add(new ComTag(c));
-				}
+			foreach(var c in _comList) {
+				c.com.STGInit(manager);
 			}
 		}
 
@@ -87,7 +110,7 @@ namespace STG.BaseUtility.ComSystem {
 		/// </summary>
 		private void AwakeComs() {
 			foreach(var c in _comList) {
-				if(c) c.com.STGAwake();
+				c.com.STGAwake();
 			}
 		}
 
@@ -121,6 +144,9 @@ namespace STG.BaseUtility.ComSystem {
 		/// コンポーネントの取得
 		/// </summary>
 		public T GetCom<T>() where T : Com {
+			if(_comList == null) {
+				_comList = InitComList(_initComs);
+			}
 			Type type = typeof(T);
 			for(int i = 0; i < _comList.Count; ++i) {
 				if(_comList[i].comType == type) {
@@ -128,6 +154,18 @@ namespace STG.BaseUtility.ComSystem {
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// コンポーネントのイテレート
+		/// </summary>
+		public void IterateComs(Action<int, ComTag> action) {
+			if(_comList == null) {
+				_comList = InitComList(_initComs);
+			}
+			for(int i = 0; i < comCount; i++) {
+				action(i, _comList[i]);
+			}
 		}
 
 		#endregion

@@ -1,30 +1,17 @@
 ﻿using UnityEngine;
 using System;
 
-namespace STG.Obj.Equipment {
+namespace STG.Obj.DataObj {
 
 	/// <summary>
-	/// 種類
-	/// </summary>
-	public enum Type {
-		Weapon,
-		Thruster,
-		Addon
-	}
-
-	/// <summary>
-	/// STGの装備情報
+	/// STGデータオブジェクトの基本情報
 	/// </summary>
 	[Serializable]
-	public class STGEquipmentInfo {
+	public class STGBaseInfo {
 
 		[SerializeField]
 		private string _name;
 		public string name { get { return _name; } }
-
-		[SerializeField]
-		private Type _type;
-		public Type type { get { return _type; } }
 
 		[SerializeField]
 		private Sprite _appearance;
