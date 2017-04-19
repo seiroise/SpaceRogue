@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using STG.Obj.DataObj;
 using STG.Obj.Weapon;
 using STG.Obj.Thruster;
+using STG.User;
 
 namespace SpaceRogue.Scenes.Demo_Equipment.Scripts {
 
@@ -34,6 +35,15 @@ namespace SpaceRogue.Scenes.Demo_Equipment.Scripts {
 		[Header("PreviewAdjust")]
 		[Range(1f, 200f)]
 		public float adjustScale = 50f;
+
+		[Header("リスト")]
+		public EquipmentListPanel listWindow;
+
+		[Header("Test UserData")]
+		public UserDataObj testUserData;
+		public STGEquipmentListDataObj weaponList;
+		public STGEquipmentListDataObj thrusterList;
+		public STGEquipmentListDataObj addonList;
 
 		private STGStructureDataObj _previewSTGObj;
 
@@ -102,6 +112,30 @@ namespace SpaceRogue.Scenes.Demo_Equipment.Scripts {
 			}
 		}
 
+		/// <summary>
+		/// ユーザの所持装備をSTGEquipmentDataObjの配列に変換
+		/// </summary>
+		private STGEquipmentDataObj[] ConvertWeaponDataArray() {
+			var array = testUserData.equipments.GetWeaponArray();
+			var equipments = new STGEquipmentDataObj[array.Length];
+			for(int i = 0; i < array.Length; ++i) {
+				equipments[i] = weaponList.Get(array[i].id);
+			}
+			return equipments;
+		}
+
+		/// <summary>
+		/// ユーザの所持装備をSTGEquipmentDataObjの配列に変換
+		/// </summary>
+		private STGEquipmentDataObj[] ConvertThrusterDataArray() {
+			var array = testUserData.equipments.GetThrusterArray();
+			var equipments = new STGEquipmentDataObj[array.Length];
+			for(int i = 0; i < array.Length; ++i) {
+				equipments[i] = weaponList.Get(array[i].id);
+			}
+			return equipments;
+		}
+
 		#endregion
 
 		#region Callback
@@ -118,12 +152,15 @@ namespace SpaceRogue.Scenes.Demo_Equipment.Scripts {
 		/// </summary>
 		private void OnClickWeaponPreview(int i) {
 			Debug.Log("Weapon: " + i);
+			//詳細を表示
 			var slot = _previewSTGObj.structure.GetCom<STGObjWeaponController>()[i];
 			if(slot.isSeted) {
 				equipmentDeteil.ShowDeteil(slot.equipment.dataObj);
 			} else {
 				equipmentDeteil.ShowDeteil(weaponEmptyDataObj);
 			}
+			//所持リストを表示
+			listWindow.Show(ConvertWeaponDataArray());
 		}
 
 		/// <summary>
@@ -137,6 +174,8 @@ namespace SpaceRogue.Scenes.Demo_Equipment.Scripts {
 			} else {
 				equipmentDeteil.ShowDeteil(thrusterEmptyDataObj);
 			}
+			//所持リストを表示
+			listWindow.Show(ConvertThrusterDataArray());
 		}
 
 		#endregion

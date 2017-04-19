@@ -19,7 +19,7 @@ namespace STG.User {
 		private int _durability;
 		public int durability { get { return _durability; } }
 
-		public IDAndDurability(string id, int remain) {
+		public IDAndDurability(string id, int durability) {
 			_id = id;
 			_durability = durability;
 		}

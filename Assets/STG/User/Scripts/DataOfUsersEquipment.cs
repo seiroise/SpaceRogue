@@ -12,6 +12,7 @@ namespace STG.User {
 	[Serializable]
 	public class DataOfUsersEquipment {
 
+		[Header("Weapon")]
 		[SerializeField]
 		private int _maxWeaponNum;
 		private int maxWeaponNum { get { return _maxWeaponNum; } set { _maxWeaponNum = value; } }
@@ -19,6 +20,7 @@ namespace STG.User {
 		[SerializeField]
 		private List<IDAndDurability> _weapons;     //所持武器
 
+		[Header("Thruster")]
 		[SerializeField]
 		private int _maxThrusterNum;
 		private int maxThrusterNum { get { return _maxThrusterNum; } set { _maxThrusterNum = value; } }
@@ -26,6 +28,7 @@ namespace STG.User {
 		[SerializeField]
 		private List<IDAndDurability> _thrusters;   //所持推進器
 
+		[Header("Addon")]
 		[SerializeField]
 		private int _maxAddonNum;
 		private int maxAddonNum { get { return _maxAddonNum; } set { _maxAddonNum = value; } }
@@ -34,11 +37,29 @@ namespace STG.User {
 		private List<IDAndDurability> _addons;      //所持アドオン
 
 		/// <summary>
+		/// リストの内容をディープコピー
+		/// </summary>
+		private IDAndDurability[] ConvertDeepCopyArray(List<IDAndDurability> list) {
+			var array = new IDAndDurability[list.Count];
+			for(int i = 0; i < list.Count; ++i) {
+				array[i] = new IDAndDurability(list[i].id, list[i].durability);
+			}
+			return array;
+		}
+
+		/// <summary>
 		/// 武器の追加
 		/// </summary>
 		public void AddWeapon(string id, int durability) {
 			if(_weapons.Count >= _maxWeaponNum) return;
 			_weapons.Add(new IDAndDurability(id, durability));
+		}
+
+		/// <summary>
+		/// 武器配列の取得
+		/// </summary>
+		public IDAndDurability[] GetWeaponArray() {
+			return ConvertDeepCopyArray(_weapons);
 		}
 
 		/// <summary>
@@ -50,6 +71,13 @@ namespace STG.User {
 		}
 
 		/// <summary>
+		/// スラスタ配列の取得
+		/// </summary>
+		public IDAndDurability[] GetThrusterArray() {
+			return ConvertDeepCopyArray(_thrusters);
+		}
+
+		/// <summary>
 		/// アドオンの追加
 		/// </summary>
 		public void AddAddon(string id, int durability) {
@@ -57,5 +85,11 @@ namespace STG.User {
 			_addons.Add(new IDAndDurability(id, durability));
 		}
 
+		/// <summary>
+		/// アドオン配列の取得
+		/// </summary>
+		public IDAndDurability[] GetAddonArray() {
+			return ConvertDeepCopyArray(_addons);
+		}
 	}
 }
